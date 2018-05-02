@@ -41,6 +41,8 @@ class TrySVMWithKeras:
         self.svm_model = None
         logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
 
+    # Copy-paste from here:
+    # https://stackoverflow.com/questions/13224362/principal-component-analysis-pca-in-python
     def PCA(self, data, dims_rescaled_data=2):
         """
         returns: data transformed in 2 dims/columns + regenerated original data
