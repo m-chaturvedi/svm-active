@@ -1,7 +1,5 @@
 import os
-import random
 import pdb
-import sys
 import pandas
 import numpy as np
 import re
@@ -9,11 +7,10 @@ from keras.applications.vgg16 import VGG16
 from keras.preprocessing import image
 from keras.applications.vgg16 import preprocess_input
 import pickle
-import PIL
 
 class TryKerasConfig:
 
-    def __init__(self):
+    def __init__(self, getting_features=True):
         self.label_for_training = "broom"
         self.image_loader = "KERAS"
 
@@ -22,12 +19,12 @@ class TryKerasConfig:
         self.image_base_dir_rel_path = "train"
         self.ASSUMED_NUMBER_OF_IMAGES_IN_CATEGORY = 500
         self.pickle_file = "loaded_image_vectors.pickle"
-        self.load_from_file = False
 
-
-        self.model = VGG16(weights='imagenet', include_top=False)
+        if getting_features:
+            self.model = VGG16(weights='imagenet', include_top=False)
         self.target_size = (224, 224)
         self.img_extension = ".JPEG"
+
 
     def load_image_names(self):
         image_names_full_path = os.path.join(self.base_directory_name,
@@ -48,21 +45,24 @@ class TryKerasConfig:
 
         return features.flatten()
 
+    def get_file_path_from_label(self, label):
+        regex_match = re.match('(.*)_(.*)', label)
+        assert len(regex_match.groups()) == 2
+        assert regex_match.groups()[0][0] == 'n'
+        assert regex_match.groups()[1].isdigit()
+        class_dir_name = regex_match.groups()[0]
+        file_path = os.path.join(*[self.base_directory_name,
+                                   self.image_base_dir_rel_path,
+                                   class_dir_name, "images", label])
+
+        return file_path
+
     def load_image_data_from_labels(self, labels):
         base_path = os.path.join(self.base_directory_name,
                                  self.image_base_dir_rel_path)
         all_vectors = []
         for label in labels:
-            regex_match = re.match('(.*)_(.*)', label)
-            assert len(regex_match.groups()) == 2
-            assert regex_match.groups()[0][0] == 'n'
-            assert regex_match.groups()[1].isdigit()
-
-            class_dir_name = regex_match.groups()[0]
-            file_path = os.path.join(*[self.base_directory_name,
-                                       self.image_base_dir_rel_path,
-                                      class_dir_name, "images", label])
-            #print(file_path + self.img_extension)
+            file_path = self.get_file_path_from_label(label)
             vec = self.load_image_to_vector(file_path + self.img_extension)
             all_vectors.append(vec)
 
@@ -86,50 +86,16 @@ class TryKerasConfig:
                     continue
                 all_neg_labels.append(id + "_" + str(i))
 
-        # X_train_label, X_test_label, y_train, y_test = \
-        #     train_test_split(all_pos_labels + all_neg_labels,
-        #                      [1] * len(all_pos_labels) + [-1] * len(all_neg_labels),
-        #                      test_size=self.test_train_split, random_state=42)
-        #
         all_pos_data = self.load_image_data_from_labels(all_pos_labels)
         all_neg_data = self.load_image_data_from_labels(all_neg_labels)
-        data_to_dump = (all_pos_data, all_neg_data)
+        data_to_dump = (all_pos_data, all_neg_data, all_pos_labels, all_neg_labels)
 
         pickle.dump(data_to_dump, open(self.pickle_file, "wb"))
 
         return (all_pos_data, all_neg_data)
 
 
-
-
-        # # Sampling without replacement
-        # training_ids = [(training_label, x)
-        #     for x in random.sample(xrange(1, self.num_from_training + 1),
-        #                            self.num_from_training)]
-        #
-        # total_images = (len(self.ids) - 1) * self.ASSUMED_NUMBER_OF_IMAGES_IN_CATEGORY
-        # testing_indx = random.sample(range(total_images), self.num_for_testing)
-        # testing_ids = []
-        #
-        # for ix in testing_indx:
-        #     q = ix / 500
-        #     r = ix % 500
-        #     if ix != label_ind:
-        #         testing_ids.append((self.ids(q), r+1))
-        #     else:
-        #         testing_ids.append((self.ids(len(self.ids) - 1), r+1))
-        #
-        # # Without replacement
-        # random.sample(filtered_names[:label_ind] +
-        #               filtered_names[label_ind+1:], self.num_from_training)
-        #
-        # random.sample(filtered_names)
-        # random.choice()
-
 if __name__ == "__main__":
     try_keras = TryKerasConfig()
-    try_keras.load_from_file = False
-
-    #try_keras.pickle_file = "loaded_image_vectors.pickle"
     try_keras.save_all_data("broom")
 
