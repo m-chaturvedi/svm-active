@@ -28,6 +28,8 @@ class TryKerasConfig:
 
     def download_database(self):
         if CONFIG["database_config"]["download_data"]:
+            assert call(["wget", CONFIG["database_config"]["repo_url"]]) == 0, \
+                 "ERROR DOWNLOADING FILE"
             logging.debug("DOWNLOADING AND UNZIPPING DATABASE")
             assert call(["unzip", "-oqq", self.base_directory_name +
                         ".zip"]) == 0, "ERROR UNZIPPING"
@@ -84,7 +86,7 @@ class TryKerasConfig:
         data_to_dump = np.array([all_pos_data, all_neg_data, all_pos_labels,
                                 all_neg_labels])
 
-        logging.debug("SAVING IMAGES")
+        logging.debug("SAVING DATA")
         np.save(self.pickle_file, data_to_dump)
         return (all_pos_data, all_neg_data)
 

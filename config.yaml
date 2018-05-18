@@ -7,7 +7,7 @@ database_config:
   all_data_file: "loaded_image_vectors.npy"
   target_size: [224, 224]
   image_extension: "JPEG"
-  download_data: False
+  download_data: True
   repo_url: "http://cs231n.stanford.edu/tiny-imagenet-200.zip"
 
 
