@@ -2,7 +2,8 @@ Implementation of SVM active proposed [here](http://infolab.stanford.edu/~echang
 
 Needs `keras`, `PIL`, `pandas` and a few other common packages.
 
-To use:
+USAGE
+-----
 
 First, have a look at the `config.yaml` file.
 
