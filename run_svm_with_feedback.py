@@ -149,7 +149,7 @@ def main():
   plt.plot(p1, linewidth=2.0, label="random")
   plt.scatter(range(len(p1)), p1)
 
-  plt.plot(p2, linewidth=2.0, label="non random")
+  plt.plot(p2, linewidth=2.0, label="SVM-active")
   plt.scatter(range(len(p2)), p2)
   plt.xlabel("Refinements")
   plt.ylabel("Accuracy")
