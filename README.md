@@ -15,4 +15,6 @@ using the configuration specified in `config.yaml` which shows the performance
 of the SVM when samples to get feedback from are chosen using the algorithm
 in the paper or chosen randomly.
 
+The SVM which is used in this implementation is the one used by [SMQTK.](https://github.com/Kitware/SMQTK/tree/master/TPL/libsvm-3.1-custom) The path is specified in `config.yaml`.
+
 
