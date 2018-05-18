@@ -1,6 +1,7 @@
 import pdb
 import Tkinter as tk
 from PIL import ImageTk, Image
+from common import *
 
 
 class DisplayPhotos:
@@ -22,6 +23,7 @@ class DisplayPhotos:
     self._root.mainloop()
 
   def display_photo(self):
+    logging.debug(self.image_path)
     self._photo = ImageTk.PhotoImage(Image.open(self.image_path))
     self._cv = tk.Canvas(width=self._photo.width() + 2*self._pad, 
                     height= self._photo.height() + 2*self._pad, 

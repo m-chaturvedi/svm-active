@@ -1,0 +1,29 @@
+database_config:
+  label_for_training: "broom"
+  base_directory_name: "tiny-imagenet-200"
+  image_names_file: "my_words.txt"
+  image_base_dir_rel_path: "train"
+  ASSUMED_NUMBER_OF_IMAGES_IN_CATEGORY: 500
+  all_data_file: "loaded_image_vectors.npy"
+  target_size: [224, 224]
+  image_extension: "JPEG"
+  download_data: False
+  repo_url: "http://cs231n.stanford.edu/tiny-imagenet-200.zip"
+
+
+svm:
+  path: "/home/chaturvedi/workspace/video-cat/build_gcc5/install/lib/python2.7/dist-packages"
+
+  param: "-b 1 -t 5 -c 2 -g 0.0078125"
+
+  num_refinements: 5
+  num_feedback: 5
+
+  num_pos: 20
+  num_neg: 20
+  simulated: True
+  plot_file: "refinements_1.png"
+  random_feedback: False
+
+
+

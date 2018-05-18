@@ -1,0 +1,5 @@
+n01443537	goldfish, Carassius auratus
+n01641577	bullfrog, Rana catesbeiana
+n02423022	gazelle
+n02906734	broom
+n02892201	brass, memorial tablet, plaque
